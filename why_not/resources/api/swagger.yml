@@ -1,0 +1,567 @@
+openapi: 3.0.0
+info:
+  title: Car Management API
+  description: API for managing cars, configurations, options and prices
+  version: 1.0.0
+servers:
+  - url: http://whynot.local/api
+    description: Local development server
+tags:
+  - name: Cars
+    description: Operations with cars
+  - name: Options
+    description: Operations with options
+  - name: Configurations
+    description: Operations with configurations
+  - name: Prices
+    description: Operations with prices
+  - name: Available
+    description: Available endpoints
+
+paths:
+  # Cars endpoints
+  /cars:
+    get:
+      tags: [Cars]
+      summary: Get all cars
+      responses:
+        '200':
+          description: List of cars
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Car'
+    post:
+      tags: [Cars]
+      summary: Create a new car
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CarInput'
+      responses:
+        '201':
+          description: Car created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Car'
+
+  /cars/{id}:
+    get:
+      tags: [Cars]
+      summary: Get a specific car
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Car details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Car'
+    put:
+      tags: [Cars]
+      summary: Update a car
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CarInput'
+      responses:
+        '200':
+          description: Car updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Car'
+    delete:
+      tags: [Cars]
+      summary: Delete a car
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Car deleted successfully
+
+  # Options endpoints
+  /options:
+    get:
+      tags: [Options]
+      summary: Get all options
+      responses:
+        '200':
+          description: List of options
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Option'
+    post:
+      tags: [Options]
+      summary: Create a new option
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OptionInput'
+      responses:
+        '201':
+          description: Option created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Option'
+
+  /options/{id}:
+    get:
+      tags: [Options]
+      summary: Get a specific option
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Option details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Option'
+    put:
+      tags: [Options]
+      summary: Update an option
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OptionInput'
+      responses:
+        '200':
+          description: Option updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Option'
+    delete:
+      tags: [Options]
+      summary: Delete an option
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Option deleted successfully
+
+  # Configurations endpoints
+  /configurations:
+    get:
+      tags: [Configurations]
+      summary: Get all configurations
+      responses:
+        '200':
+          description: List of configurations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Configuration'
+    post:
+      tags: [Configurations]
+      summary: Create a new configuration
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConfigurationInput'
+      responses:
+        '201':
+          description: Configuration created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Configuration'
+
+  /configurations/{id}:
+    get:
+      tags: [Configurations]
+      summary: Get a specific configuration
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Configuration details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Configuration'
+    put:
+      tags: [Configurations]
+      summary: Update a configuration
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConfigurationInput'
+      responses:
+        '200':
+          description: Configuration updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Configuration'
+    delete:
+      tags: [Configurations]
+      summary: Delete a configuration
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Configuration deleted successfully
+
+  # Configuration Options endpoints
+  /configurations/{id}/options:
+    post:
+      tags: [Configurations]
+      summary: Add option to configuration
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                option_id:
+                  type: integer
+      responses:
+        '201':
+          description: Option added to configuration
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConfigurationOption'
+
+    delete:
+      tags: [Configurations]
+      summary: Remove option from configuration
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+        - in: query
+          name: option_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Option removed from configuration
+
+  # Prices endpoints
+  /prices:
+    get:
+      tags: [Prices]
+      summary: Get all prices
+      responses:
+        '200':
+          description: List of prices
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Price'
+    post:
+      tags: [Prices]
+      summary: Create a new price
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PriceInput'
+      responses:
+        '201':
+          description: Price created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Price'
+
+  /prices/{id}:
+    get:
+      tags: [Prices]
+      summary: Get a specific price
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Price details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Price'
+    put:
+      tags: [Prices]
+      summary: Update a price
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PriceInput'
+      responses:
+        '200':
+          description: Price updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Price'
+    delete:
+      tags: [Prices]
+      summary: Delete a price
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Price deleted successfully
+
+  # Available endpoint
+  /cars/available:
+    get:
+      tags: [Available]
+      summary: Get current assortment with prices
+      responses:
+        '200':
+          description: List of available cars with configurations and current prices
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AssortmentItem'
+
+components:
+  schemas:
+    Car:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    CarInput:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          example: "Audi"
+
+    Option:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    OptionInput:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          example: "Leather seats"
+
+    Configuration:
+      type: object
+      properties:
+        id:
+          type: integer
+        car_id:
+          type: integer
+        name:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/Option'
+    ConfigurationInput:
+      type: object
+      required:
+        - car_id
+        - name
+      properties:
+        car_id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Premium"
+
+    ConfigurationOption:
+      type: object
+      properties:
+        id:
+          type: integer
+        configuration_id:
+          type: integer
+        option_id:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    Price:
+      type: object
+      properties:
+        id:
+          type: integer
+        configuration_id:
+          type: integer
+        price:
+          type: number
+          format: float
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    PriceInput:
+      type: object
+      required:
+        - configuration_id
+        - price
+        - start_date
+      properties:
+        configuration_id:
+          type: integer
+          example: 1
+        price:
+          type: number
+          format: float
+          example: 45000.00
+        start_date:
+          type: string
+          format: date
+          example: "2023-01-01"
+        end_date:
+          type: string
+          format: date
+          example: "2023-12-31"
+
+    AssortmentItem:
+      type: object
+      properties:
+        car:
+          $ref: '#/components/schemas/Car'
+        configurations:
+          type: array
+          items:
+            type: object
+            properties:
+              configuration:
+                $ref: '#/components/schemas/Configuration'
+              current_price:
+                $ref: '#/components/schemas/Price'

@@ -1,0 +1,47 @@
+services:
+  nginx:
+    build: ./nginx
+    restart: unless-stopped
+    volumes:
+      - ./:/var/www
+      - ./logs:/var/log/nginx
+    ports:
+      - "80:80"
+    networks:
+      - work-docker
+  php83:
+    build: ./php83
+    restart: unless-stopped
+    volumes:
+      - ./:/var/www
+      - ./logs:/var/www/logs
+    ports:
+      - "5173:5173"
+    networks:
+      - work-docker
+  redis:
+    image: redis:latest
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - work-docker
+    volumes:
+      - ./redis-data:/data
+  postgres:
+    image: postgres:latest
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: 'postgres'
+      POSTGRES_PASSWORD: 'postgres'
+      POSTGRES_DB: 'why_not_db'
+    ports:
+      - "5432:5432"
+    networks:
+      - work-docker
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+
+networks:
+  work-docker:
+    driver: bridge
